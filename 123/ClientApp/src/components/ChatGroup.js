@@ -85,7 +85,14 @@ export class ChatGroup extends Component {
                     </Col>
                     <Col>
                         <div>
-                            <h1> nn</h1>
+                            <button onClick={this.sendMessage}>Join Nover Chat</button>
+                            <br />
+                            <input
+                                type="text"
+                                value={this.state.message}
+                                onChange={e => this.setState({ message: e.target.value })}
+                            />
+                            <button onClick={this.sendMessage}>Send</button>
                         </div>
                     </Col>
                 </Row>
