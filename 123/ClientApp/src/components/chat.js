@@ -24,7 +24,7 @@ export class chat extends Component {
             .withUrl("/chatt")
             .configureLogging(signalR.LogLevel.Information)
             .build();
-
+        
         this.setState({ hubConnection, nick }, () => {
             this.state.hubConnection
                 .start()
@@ -37,7 +37,19 @@ export class chat extends Component {
                 this.setState({ messages });
             });
         });
+        const noverConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/Nover")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+        this.setState({ noverConnection }, () => {
+            this.state.noverConnection
+                .start()
+                .then(() => console.log('Connection started! Nover'))
+                .catch(err => console.log('Error while establishing connection :( Nover'));
+        });
     }
+
+    
 
     sendMessage = () => {
         this.state.hubConnection
@@ -48,6 +60,7 @@ export class chat extends Component {
     };
   
     JoinRoom = () => {
+
         this.state.hubConnection
             .invoke('JoinRoom', this.state.nick, this.state.roomName)
             .catch(err => console.error(err));
