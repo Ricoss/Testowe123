@@ -40,7 +40,19 @@ export class ChatGroup extends Component {
 
     }
 
+    JoniChat = () => {
+        const noverConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/Nover")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+        this.setState({ noverConnection}, () => {
+            this.state.noverConnection
+                .start()
+                .then(() => console.log('Connection started! Nover'))
+                .catch(err => console.log('Error while establishing connection :( Nover'));
 
+        });
+    };
 
     sendMessage = () => {
         this.state.hubConnection
