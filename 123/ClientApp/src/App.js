@@ -5,6 +5,7 @@ import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
 import { chat } from './components/chat';
+import { ChatGroup } from './components/ChatGroup';
 
 import './custom.css'
 
@@ -18,6 +19,8 @@ export default class App extends Component {
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data' component={FetchData} />
         <Route path='/chat' component={chat} />
+        <Route path='/123' component={ChatGroup} />
+
       </Layout>
     );
   }
