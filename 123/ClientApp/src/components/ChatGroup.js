@@ -11,7 +11,10 @@ export class ChatGroup extends Component {
             nick: '',
             message: '',
             messages: [],
+            messagenover: '',
+            messagesnover: [],
             hubConnection: null,
+            noverConnection: null,
         };
         
     }
@@ -51,8 +54,20 @@ export class ChatGroup extends Component {
                 .then(() => console.log('Connection started! Nover'))
                 .catch(err => console.log('Error while establishing connection :( Nover'));
 
+            this.state.noverConnection.on('SendMessage', (nick, receivedMessage) => {
+                const text = `${nick}: ${receivedMessage}`;
+                const messagesnover = this.state.messagesnover.concat([text]);
+                this.setState({ messagesnover });
+            });
         });
     };
+
+    //ExitChat = () => {
+    //    this.state.noverConnection.
+    //        .then(() => console.log('exit Nover'))
+    //        .catch(err => console.log('Error while establishing connection :( Nover'));
+    //};
+
 
     sendMessage = () => {
         this.state.hubConnection
@@ -63,7 +78,14 @@ export class ChatGroup extends Component {
 
     };   
        
-    
+    sendMessageNovwe = () => {
+        this.state.noverConnection
+            .invoke('SendMessage', this.state.nick, this.state.messagenover)
+            .catch(err => console.error(err));
+
+        this.setState({ messagenover: '' });
+
+    };   
 
     
 
@@ -101,10 +123,16 @@ export class ChatGroup extends Component {
                             <br />
                             <input
                                 type="text"
-                                value={this.state.message}
-                                onChange={e => this.setState({ message: e.target.value })}
+                                value={this.state.messagenover}
+                                onChange={e => this.setState({ messagenover: e.target.value })}
                             />
-                            <button onClick={this.sendMessage}>Send</button>
+                            <button onClick={this.sendMessageNover}>Send</button>
+
+                            <div>
+                                {this.state.messagesnover.map((messagenover, index) => (
+                                    <span style={{ display: 'block' }} key={index}> {messagenover} </span>
+                                ))}
+                            </div>
                         </div>
                     </Col>
                 </Row>
