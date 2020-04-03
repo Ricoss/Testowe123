@@ -37,16 +37,8 @@ export class chat extends Component {
                 this.setState({ messages });
             });
         });
-        const noverConnection = new signalR.HubConnectionBuilder()
-            .withUrl("/Nover")
-            .configureLogging(signalR.LogLevel.Information)
-            .build();
-        this.setState({ noverConnection }, () => {
-            this.state.noverConnection
-                .start()
-                .then(() => console.log('Connection started! Nover'))
-                .catch(err => console.log('Error while establishing connection :( Nover'));
-        });
+        
+       
     }
 
     
@@ -57,16 +49,9 @@ export class chat extends Component {
             .catch(err => console.error(err));
 
         this.setState({ message: '' });
-    };
   
-    JoinRoom = () => {
-
-        this.state.hubConnection
-            .invoke('JoinRoom', this.state.nick, this.state.roomName)
-            .catch(err => console.error(err));
-
-       // this.setState({ message: '' });
     };
+   
 
 
 
@@ -80,13 +65,7 @@ export class chat extends Component {
                     onChange={e => this.setState({ message: e.target.value })}
                 /> 
                 <button onClick={this.sendMessage}>Send</button>
-                <br />
-                <input
-                    type="text"
-                    value={this.state.roomName}
-                    onChange={e => this.setState({ roomName: e.target.value })}
-                />
-                <button onClick={this.JoinRoom}>JoinRoom</button>
+                
 
                 <div>
                     {this.state.messages.map((message, index) => (
@@ -94,13 +73,7 @@ export class chat extends Component {
                     ))}
                 </div>
 
-                <div>
-                    <h1> Nower </h1>
-                    {this.state.messages.map((message, index) => (
-                        <span style={{ display: 'block' }} key={index}> {message} </span>
-                    ))}
-                </div>
-
+               
             </div>
 
 
