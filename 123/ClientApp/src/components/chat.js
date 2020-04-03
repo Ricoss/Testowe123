@@ -47,7 +47,13 @@ export class chat extends Component {
         this.setState({ message: '' });
     };
   
+    JoinRoom = () => {
+        this.state.hubConnection
+            .invoke('JoinRoom', this.state.nick, this.state.roomName)
+            .catch(err => console.error(err));
 
+       // this.setState({ message: '' });
+    };
 
 
 
@@ -59,9 +65,15 @@ export class chat extends Component {
                     type="text"
                     value={this.state.message}
                     onChange={e => this.setState({ message: e.target.value })}
-                />
-
+                /> 
                 <button onClick={this.sendMessage}>Send</button>
+                <br />
+                <input
+                    type="text"
+                    value={this.state.roomName}
+                    onChange={e => this.setState({ roomName: e.target.value })}
+                />
+                <button onClick={this.JoinRoom}>JoinRoom</button>
 
                 <div>
                     {this.state.messages.map((message, index) => (
