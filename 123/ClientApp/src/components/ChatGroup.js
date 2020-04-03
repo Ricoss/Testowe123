@@ -14,7 +14,6 @@ export class ChatGroup extends Component {
             messagenover: '',
             messagesnover: [],
             hubConnection: null,
-            noverConnection: null,
         };
         
     }
@@ -44,22 +43,17 @@ export class ChatGroup extends Component {
     }
 
     JoniChat = () => {
-        const noverConnection = new signalR.HubConnectionBuilder()
-            .withUrl("/Nover")
-            .configureLogging(signalR.LogLevel.Information)
-            .build();
-        this.setState({ noverConnection}, () => {
-            this.state.noverConnection
-                .start()
-                .then(() => console.log('Connection started! Nover'))
-                .catch(err => console.log('Error while establishing connection :( Nover'));
-
-            this.state.noverConnection.on('SendMessage', (nick, receivedMessage) => {
+        
+        this.state.hubConnection
+            .invoke('JoinRoom', this.state.nick, 'Nover')
+            .then(() => console.log('Connection started! Nover'))
+            .catch(err => console.error(err));
+        this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage) => {
                 const text = `${nick}: ${receivedMessage}`;
-                const messagesnover = this.state.messagesnover.concat([text]);
-                this.setState({ messagesnover });
+                 const messagesnover = this.state.messagesnover.concat([text]);
+                 this.setState({ messagesnover });
             });
-        });
+        
     };
 
     //ExitChat = () => {
@@ -79,8 +73,8 @@ export class ChatGroup extends Component {
     };   
        
     sendMessageNovwe = () => {
-        this.state.noverConnection
-            .invoke('SendMessage', this.state.nick, this.state.messagenover)
+        this.state.hubConnection
+            .invoke('SendMessageGroup', this.state.nick, this.state.messagenover,'Nover')
             .catch(err => console.error(err));
 
         this.setState({ messagenover: '' });

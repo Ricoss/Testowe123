@@ -15,6 +15,10 @@ namespace Chat.Hubs
             await Groups.AddToGroupAsync( name, roomName);
             await Clients.Group(roomName).SendAsync(name + " join.");
         }
+        public async Task SendMessageGroup (string name , string message, string roomName)
+        {
+            await Clients.Group(roomName).SendAsync("SendMessageGroup", name, message);
+        }
     }
 
     //public class ContosoChatHub : Hub
