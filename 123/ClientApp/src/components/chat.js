@@ -9,10 +9,12 @@ export class chat extends Component {
 
         this.state = {
             nick: '',
+            roomName:'',
             message: '',
             messages: [],
             hubConnection: null,
         };
+        
     }
 
     componentDidMount = () => {
@@ -44,6 +46,8 @@ export class chat extends Component {
 
         this.setState({ message: '' });
     };
+  
+
 
 
 
@@ -64,6 +68,14 @@ export class chat extends Component {
                         <span style={{ display: 'block' }} key={index}> {message} </span>
                     ))}
                 </div>
+
+                <div>
+                    <h1> Nower </h1>
+                    {this.state.messages.map((message, index) => (
+                        <span style={{ display: 'block' }} key={index}> {message} </span>
+                    ))}
+                </div>
+
             </div>
 
 
