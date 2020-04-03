@@ -52,7 +52,7 @@ export class ChatGroup extends Component {
                 const text = `${nick}: ${receivedMessage}`;
                  const messagesnover = this.state.messagesnover.concat([text]);
                  this.setState({ messagesnover });
-            });
+            },'Nover');
         
     };
 
@@ -72,13 +72,13 @@ export class ChatGroup extends Component {
 
     };   
        
-    sendMessageNovwe = () => {
+    sendMessageNover = () => {
         this.state.hubConnection
             .invoke('SendMessageGroup', this.state.nick, this.state.messagenover,'Nover')
             .catch(err => console.error(err));
 
         this.setState({ messagenover: '' });
-
+       
     };   
 
     
