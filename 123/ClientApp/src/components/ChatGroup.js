@@ -97,7 +97,7 @@ export class ChatGroup extends Component {
                     </Col>
                     <Col>
                         <div>
-                            <button onClick={this.sendMessage}>Join Nover Chat</button>
+                            <button onClick={this.JoniChat}>Join Nover Chat</button>
                             <br />
                             <input
                                 type="text"
