@@ -31,7 +31,7 @@ export class chat extends Component {
                 .then(() => console.log('Connection started!'))
                 .catch(err => console.log('Error while establishing connection :('));
 
-            this.state.hubConnection.on('SendMessage', (nick, receivedMessage) => {
+            this.state.hubConnection.on('SendMessageToAll', (nick, receivedMessage) => {
                 const text = `${nick}: ${receivedMessage}`;
                 const messages = this.state.messages.concat([text]);
                 this.setState({ messages });
@@ -45,7 +45,7 @@ export class chat extends Component {
 
     sendMessage = () => {
         this.state.hubConnection
-            .invoke('SendMessage', this.state.nick, this.state.message)
+            .invoke('SendMessageToAll', this.state.nick, this.state.message)
             .catch(err => console.error(err));
 
         this.setState({ message: '' });
