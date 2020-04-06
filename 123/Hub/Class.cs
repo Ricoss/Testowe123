@@ -29,6 +29,10 @@ namespace Chat.Hubs
             await Groups.AddToGroupAsync( Context.ConnectionId, roomName);
            // await Clients.Group(roomName).SendAsync(name + " join.");
         }
+        public async Task SendMessageGroup (string name , string message, string roomName)
+        {
+            await Clients.Group(roomName).SendAsync("SendMessageGroup", name, message);
+        }
         public override async Task OnConnectedAsync()
         {
             await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
@@ -38,14 +42,6 @@ namespace Chat.Hubs
         {
             await Clients.All.SendAsync("UserDisconnected", Context.ConnectionId);
             await base.OnDisconnectedAsync(ex);
-        }
-
-
-
-
-        public async Task SendMessageGroup (string name , string message, string roomName)
-        {
-            await Clients.Group(roomName).SendAsync("SendMessageGroup", name, message);
         }
     }
 
