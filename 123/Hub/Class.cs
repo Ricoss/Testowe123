@@ -1,5 +1,6 @@
 ﻿using _123.Hub;
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,8 +30,11 @@ namespace Chat.Hubs
             await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
             await base.OnConnectedAsync();
         }
-
-
+        public override async Task OnDisconnectedAsync( Exception ex)
+        {
+            await Clients.All.SendAsync("UserDisconnected", Context.ConnectionId);
+            await base.OnDisconnectedAsync(ex);
+        }
 
 
 
