@@ -132,7 +132,7 @@ export class ChatGroup extends Component {
 
                     <Col>
                         <div>
-                            
+                            <h2>ll</h2>
                         </div>
                     </Col>
                 </Row>
