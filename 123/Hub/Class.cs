@@ -1,6 +1,7 @@
 ﻿using _123.Hub;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Chat.Hubs
@@ -9,15 +10,25 @@ namespace Chat.Hubs
 
     public class ChatHub : Hub
     {
-
-    private static ConcurrentDictionary<string, User> ChatClients = new ConcurrentDictionary<string, User>();
-
-        public async Task SendMessage(string name, string message)
+        public async Task SendMessageToAll(string name, string message)
         {
-            await Clients.All.SendAsync("SendMessage", name, message);   
+            await Clients.All.SendAsync("SendMessageToAll", name, message);
+        }
+        public Task SendMessageToCaller(string message)
+        {
+            return Clients.Caller.SendAsync("ReceiveMessage", message);
         }
 
-        public 
+        public Task SendMessageToUser(string connectionId, string message)
+        {
+            return Clients.Client(connectionId).SendAsync("ReceiveMessage", message);
+        }
+
+
+
+
+
+
 
        public async Task JoinRoom (string name, string roomName)
         {
