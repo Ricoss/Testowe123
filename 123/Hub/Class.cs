@@ -24,7 +24,11 @@ namespace Chat.Hubs
         {
             return Clients.Client(connectionId).SendAsync("ReceiveMessage", message);
         }
-
+       public async Task JoinRoom (string roomName)
+        {
+            await Groups.AddToGroupAsync( Context.ConnectionId, roomName);
+           // await Clients.Group(roomName).SendAsync(name + " join.");
+        }
         public override async Task OnConnectedAsync()
         {
             await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
@@ -39,11 +43,6 @@ namespace Chat.Hubs
 
 
 
-       public async Task JoinRoom (string roomName)
-        {
-            await Groups.AddToGroupAsync( Context.ConnectionId, roomName);
-           // await Clients.Group(roomName).SendAsync(name + " join.");
-        }
         public async Task SendMessageGroup (string name , string message, string roomName)
         {
             await Clients.Group(roomName).SendAsync("SendMessageGroup", name, message);
