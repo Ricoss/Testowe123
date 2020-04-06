@@ -13,6 +13,8 @@ export class ChatGroup extends Component {
             messages: [],
             messagenover: '',
             messagesnover: [],
+            messagepriv: '',
+            messagespriv: '',
             hubConnection: null,
             Nover: 'Nover',
         };
@@ -57,13 +59,6 @@ export class ChatGroup extends Component {
         
     };
 
-    //ExitChat = () => {
-    //    this.state.noverConnection.
-    //        .then(() => console.log('exit Nover'))
-    //        .catch(err => console.log('Error while establishing connection :( Nover'));
-    //};
-
-
     sendMessage = () => {
         this.state.hubConnection
             .invoke('SendMessageToAll', this.state.nick, this.state.message)
@@ -82,6 +77,10 @@ export class ChatGroup extends Component {
        
     };   
 
+    sendPrivMessage = () => {
+        this.state.hubConnection
+            .invoke('SendMessageToUser', this.state.nick, , thsi.state.messagepriv)
+    }
     
 
    
@@ -128,6 +127,12 @@ export class ChatGroup extends Component {
                                     <span style={{ display: 'block' }} key={index}> {messagenover} </span>
                                 ))}
                             </div>
+                        </div>
+                    </Col>
+
+                    <Col>
+                        <div>
+                            
                         </div>
                     </Col>
                 </Row>

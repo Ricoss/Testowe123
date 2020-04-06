@@ -1,8 +1,5 @@
-﻿using _123.Hub;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Chat.Hubs
@@ -20,9 +17,9 @@ namespace Chat.Hubs
             return Clients.Caller.SendAsync("ReceiveMessage", message);
         }
 
-        public Task SendMessageToUser(string connectionId, string message)
+        public Task SendMessageToUser(string name, string connectionId, string message)
         {
-            return Clients.Client(connectionId).SendAsync("ReceiveMessage", message);
+            return Clients.Client(connectionId).SendAsync("ReceiveMessage", name, message);
         }
        public async Task JoinRoom (string roomName)
         {
@@ -44,21 +41,5 @@ namespace Chat.Hubs
             await base.OnDisconnectedAsync(ex);
         }
     }
-
-    //public class ContosoChatHub : Hub
-    //{
-    //    //public Task JoinRoom(string name, string roomName)
-    //    //{
-    //    //    return Groups.AddToGroupAsync(name, roomName);
-            
-    //    //}
-
-    //    //public Task LeaveRoom(string roomName)
-    //    //{
-    //    //    return Groups.Remove(Context.ConnectionId, roomName);
-    //    //}
-    //}
-
-
 }
 
