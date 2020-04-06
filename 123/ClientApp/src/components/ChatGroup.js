@@ -14,6 +14,7 @@ export class ChatGroup extends Component {
             messagenover: '',
             messagesnover: [],
             hubConnection: null,
+            Nover: 'Nover',
         };
         
     }
@@ -45,14 +46,14 @@ export class ChatGroup extends Component {
     JoniChat = () => {
         
         this.state.hubConnection
-            .invoke('JoinRoom', this.state.nick, 'Nover')
+            .invoke('JoinRoom', this.state.nick, this.state.Nover)
             .then(() => console.log('Connection started! Nover'))
             .catch(err => console.error(err));
-        this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage) => {
+        this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage , ) => {
                 const text = `${nick}: ${receivedMessage}`;
                  const messagesnover = this.state.messagesnover.concat([text]);
                  this.setState({ messagesnover });
-            },'Nover');
+        });
         
     };
 
@@ -74,7 +75,7 @@ export class ChatGroup extends Component {
        
     sendMessageNover = () => {
         this.state.hubConnection
-            .invoke('SendMessageGroup', this.state.nick, this.state.messagenover,'Nover')
+            .invoke('SendMessageGroup', this.state.nick, this.state.messagenover, this.state.Nover)
             .catch(err => console.error(err));
 
         this.setState({ messagenover: '' });
