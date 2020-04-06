@@ -24,6 +24,11 @@ namespace Chat.Hubs
             return Clients.Client(connectionId).SendAsync("ReceiveMessage", message);
         }
 
+        public override async Task OnConnectedAsync()
+        {
+            await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
+            await base.OnConnectedAsync();
+        }
 
 
 
