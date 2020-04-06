@@ -39,9 +39,9 @@ namespace Chat.Hubs
 
 
 
-       public async Task JoinRoom (string name, string roomName)
+       public async Task JoinRoom (string roomName)
         {
-            await Groups.AddToGroupAsync( name, roomName);
+            await Groups.AddToGroupAsync( Context.ConnectionId, roomName);
            // await Clients.Group(roomName).SendAsync(name + " join.");
         }
         public async Task SendMessageGroup (string name , string message, string roomName)
