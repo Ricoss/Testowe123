@@ -14,16 +14,18 @@ export class ChatGroup extends Component {
             messagenover: '',
             messagesnover: [],
             messagepriv: '',
-            messagespriv: '',
+            messagespriv: [],
             hubConnection: null,
-            Nover: 'Nover',
+            Nover: 'Nover', 
+            name: '',
         };
         
     }
-
+    
     componentDidMount = () => {
-        const nick = window.prompt('Your name:', 'John');
 
+        
+        const nick = window.prompt('Your name:', 'John'); 
         const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("/chatt")
             .configureLogging(signalR.LogLevel.Information)
@@ -34,6 +36,8 @@ export class ChatGroup extends Component {
                 .start()
                 .then(() => console.log('Connection started!'))
                 .catch(err => console.log('Error while establishing connection :('));
+
+            
 
             this.state.hubConnection.on('SendMessageToAll', (nick, receivedMessage) => {
                 const text = `${nick}: ${receivedMessage}`;
@@ -79,15 +83,15 @@ export class ChatGroup extends Component {
 
     sendPrivMessage = () => {
         this.state.hubConnection
-            .invoke('SendMessageToUser', this.state.nick, , thsi.state.messagepriv)
+            .invoke('SendMessageToUser', this.state.nick, this.state.messagepriv)
     }
     
-
-   
-
+    
+    
 
 
     render() {
+        
         return (
             <Container>
                 <Row >
@@ -132,13 +136,29 @@ export class ChatGroup extends Component {
 
                     <Col>
                         <div>
-                            <h2>ll</h2>
+                            <h1>Private</h1>
+                            Nick :
+                            <input 
+                                type="text"
+                                value={this.state.name}
+                                onChange={e => this.setState({ name: e.target.value })}
+                            />
+                            Message:
+                             <input
+                                type="text"
+                                value={this.state.messagepriv}
+                                onChange={e => this.setState({ messagepriv: e.target.value })}
+                            />
+                            <button onClick={this.sendMessageNover}>Send</button>
+                            <div>
+                                {this.state.messagespriv.map((messagepriv, index) => (
+                                    <span style={{ display: 'block' }} key={index}> {messagepriv} </span>
+                                ))}
+                            </div>
                         </div>
                     </Col>
                 </Row>
             </Container>  
-
-
         );
     }
 

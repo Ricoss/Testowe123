@@ -8,6 +8,7 @@ namespace Chat.Hubs
 
     public class ChatHub : Hub
     {
+
         public async Task SendMessageToAll(string name, string message)
         {
             await Clients.All.SendAsync("SendMessageToAll", name, message);
