@@ -24,7 +24,6 @@ export class ChatGroup extends Component {
     
     componentDidMount = () => {
 
-        
         const nick = window.prompt('Your name:', 'John'); 
         const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("/chatt")
@@ -34,8 +33,9 @@ export class ChatGroup extends Component {
         this.setState({ hubConnection, nick }, () => {
             this.state.hubConnection
                 .start()
-                .then(() => console.log('Connection started!'))
+                .then(() => console.log('Connection started! ID: [  '+ hubConnection.connectionId+'  ]'))
                 .catch(err => console.log('Error while establishing connection :('));
+            
 
             
 
@@ -55,6 +55,7 @@ export class ChatGroup extends Component {
             .invoke('JoinRoom', this.state.Nover)
             .then(() => console.log('Connection started! Nover'))
             .catch(err => console.error(err));
+
         this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage , ) => {
                 const text = `${nick}: ${receivedMessage}`;
                  const messagesnover = this.state.messagesnover.concat([text]);
