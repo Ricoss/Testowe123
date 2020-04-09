@@ -83,9 +83,13 @@ export class ChatGroup extends Component {
     };   
 
     sendPrivMessage = () => {
+
         this.state.hubConnection
-            .invoke('SendMessageToUser', this.state.nick, this.state.messagepriv)
+            .invoke('SendMessageToUser', this.state.nick, this.statis.name, this.state.messagepriv)
+            .catch(err => console.error(err))
+        this.messagespriv({ messagenover: '' });
     }
+
     
     
     
@@ -150,7 +154,7 @@ export class ChatGroup extends Component {
                                 value={this.state.messagepriv}
                                 onChange={e => this.setState({ messagepriv: e.target.value })}
                             />
-                            <button onClick={this.sendMessageNover}>Send</button>
+                            <button onClick={this.sendPrivMessage}>Send</button>
                             <div>
                                 {this.state.messagespriv.map((messagepriv, index) => (
                                     <span style={{ display: 'block' }} key={index}> {messagepriv} </span>

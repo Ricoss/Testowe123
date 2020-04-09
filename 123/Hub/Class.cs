@@ -18,9 +18,9 @@ namespace Chat.Hubs
             return Clients.Caller.SendAsync("ReceiveMessage", message);
         }
 
-        public Task SendMessageToUser(string name, string connectionId, string message)
+        public Task SendMessageToUser(string name, string connect, string message)
         {
-            return Clients.Client(connectionId).SendAsync("ReceiveMessage", name, message);
+            return Clients.Client(connect).SendAsync("ReceiveMessage", name, message);
         }
        public async Task JoinRoom (string roomName)
         {
