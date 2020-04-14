@@ -1,6 +1,7 @@
 ﻿using _123.Hub;
 using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,9 +9,9 @@ namespace Chat.Hubs
 {
 
 
-    public class ChatHub : Hub
+    public class ChatHub : Hub 
     {
-
+        private static ConcurrentDictionary<string, User> ChatClients = new ConcurrentDictionary<string, User>();
         public List<User> Login(string name)
         {
             if (!ChatClients.ContainsKey(name))
@@ -20,7 +21,6 @@ namespace Chat.Hubs
                 var added = ChatClients.TryAdd(name, newUser);
                 if (!added)
                     return null;
-                Clients.Others.ParticipantLogin(newUser);
                 return users;
             }
             return null;
@@ -60,3 +60,7 @@ namespace Chat.Hubs
     }
 }
 
+public interface IClient
+{
+    void ParticipantLogin(User client);
+}
