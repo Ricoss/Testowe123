@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-
+import { Container, Row, Col } from 'reactstrap';
 import * as signalR from "@microsoft/signalr";
 
 export class Endchat extends Component {
@@ -9,43 +9,62 @@ export class Endchat extends Component {
 
         this.state = {
             nick: '',
-            roomName:'',
+            roomName:'123',
             message: '',
             messages: [],
             hubConnection: null,
+            
         };
         
     }
 
     componentDidMount = () => {
         const nick = window.prompt('Your name:', 'John');
+        
+       
 
         const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("/chatt")
             .configureLogging(signalR.LogLevel.Information)
             .build();
-        
+
         this.setState({ hubConnection, nick }, () => {
             this.state.hubConnection
                 .start()
                 .then(() => console.log('Connection started!'))
-                .catch(err => console.log('Error while establishing connection :('));
+                .catch(err => console.log('Error while establishing connection :('))
+                
 
-            this.state.hubConnection.on('SendMessageToAll', (nick, receivedMessage) => {
-                const text = `${nick}: ${receivedMessage}`;
-                const messages = this.state.messages.concat([text]);
-                this.setState({ messages });
-            });
         });
         
-       
     }
 
-    
+    sendNick = () => {
+
+        this.state.hubConnection
+            .invoke('Login', this.state.nick)
+            .then(() => console.log('Apllay'))
+            .catch(err => console.error(err));
+    }
+
+    JoniChat = () => {
+
+        this.state.hubConnection
+            .invoke('JoinRoom', this.state.roomName)
+            .then(() => console.log('Connection started! Nover'))
+            .catch(err => console.error(err));
+
+        this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage, ) => {
+            const text = `${nick}: ${receivedMessage}`;
+            const messages = this.state.messages.concat([text]);
+            this.setState({ messages });
+        });
+
+    };
 
     sendMessage = () => {
         this.state.hubConnection
-            .invoke('SendMessageToAll', this.state.nick, this.state.message)
+            .invoke('SendMessageGroup', this.state.nick, this.state.message, this.state.roomName)
             .catch(err => console.error(err));
 
         this.setState({ message: '' });
@@ -55,9 +74,14 @@ export class Endchat extends Component {
 
 
 
-    render() {
+    render() { 
         return (
+            
             <div>
+                    <button onClick={this.sendNick}>SendNick</button>
+                    <br />
+                    <button onClick={this.JoniChat}>Join Nover Chat</button>
+                    <br />
                 <br />
                 <input
                     type="text"
