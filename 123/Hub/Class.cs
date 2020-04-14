@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using _123.Hub;
+using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Chat.Hubs
@@ -9,6 +11,20 @@ namespace Chat.Hubs
     public class ChatHub : Hub
     {
 
+        public List<User> Login(string name)
+        {
+            if (!ChatClients.ContainsKey(name))
+            {
+                List<User> users = new List<User>(ChatClients.Values);
+                User newUser = new User { Name = name, ID = Context.ConnectionId };
+                var added = ChatClients.TryAdd(name, newUser);
+                if (!added)
+                    return null;
+                Clients.Others.ParticipantLogin(newUser);
+                return users;
+            }
+            return null;
+        }
         public async Task SendMessageToAll(string name, string message)
         {
             await Clients.All.SendAsync("SendMessageToAll", name, message);
