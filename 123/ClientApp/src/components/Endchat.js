@@ -13,7 +13,7 @@ export class Endchat extends Component {
             message: '',
             messages: [],
             hubConnection: null,
-            
+            privNick: '',
         };
         
     }
@@ -35,12 +35,10 @@ export class Endchat extends Component {
                 .catch(err => console.log('Error while establishing connection :('))
                 
 
-        });
-        
+        });      
     }
 
     sendNick = () => {
-
         this.state.hubConnection
             .invoke('Login', this.state.nick)
             .then(() => console.log('Apllay'))
@@ -48,7 +46,6 @@ export class Endchat extends Component {
     }
 
     JoniChat = () => {
-
         this.state.hubConnection
             .invoke('JoinRoom', this.state.roomName)
             .then(() => console.log('Connection started! Nover'))
@@ -76,30 +73,41 @@ export class Endchat extends Component {
 
     render() { 
         return (
-            
-            <div>
-                    <button onClick={this.sendNick}>SendNick</button>
-                    <br />
-                    <button onClick={this.JoniChat}>Join Nover Chat</button>
-                    <br />
-                <br />
-                <input
-                    type="text"
-                    value={this.state.message}
-                    onChange={e => this.setState({ message: e.target.value })}
-                /> 
-                <button onClick={this.sendMessage}>Send</button>
-                
-
-                <div>
-                    {this.state.messages.map((message, index) => (
-                        <span style={{ display: 'block' }} key={index}> {message} </span>
-                    ))}
-                </div>
-
-               
-            </div>
-
+            <Container>
+                <Row>
+                    <Col>
+                        <div>    
+                            <button onClick={this.sendNick}>Login</button>
+                            <br />
+                            Send priv to:
+                            <br />  
+                            <input
+                                type="text"
+                                value={this.state.privNick}
+                                onChange={e => this.setState({ privNick: e.target.value })}
+                            />
+                            <br />
+                            Mesage:
+                            <br />
+                            <input
+                                type="text"
+                                value={this.state.message}
+                                onChange={e => this.setState({ message: e.target.value })}
+                            /> 
+                            <br />
+                               <button onClick={this.sendMessage}>Send</button>
+                        </div>
+                        
+                    </Col>
+                    <Col>
+                        <div>
+                            {this.state.messages.map((message, index) => (
+                                <span style={{ display: 'block' }} key={index}> {message} </span>
+                            ))}
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
 
         );
     }
