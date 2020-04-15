@@ -34,8 +34,13 @@ export class Endchat extends Component {
                 .then(() => console.log('Connection started!'))
                 .catch(err => console.log('Error while establishing connection :('))
                 
+        this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage, ) => {
+            const text = `${nick}: ${receivedMessage}`;
+            const messages = this.state.messages.concat([text]);
+            this.setState({ messages });
+        });
 
-        });      
+        });  
     }
 
     sendNick = () => {
@@ -60,12 +65,6 @@ export class Endchat extends Component {
     };
 
     sendMessage = () => {
-
-        //this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage, ) => {
-        //    const text = `${nick}: ${receivedMessage}`;
-        //    const messages = this.state.messages.concat([text]);
-        //    this.setState({ messages });
-        //});
         this.state.hubConnection
             .invoke('SendMessageGroup', this.state.nick, this.state.message, this.state.roomName)
             .catch(err => console.error(err));
@@ -80,14 +79,17 @@ export class Endchat extends Component {
         this.state.hubConnection
             .invoke('Private', this.state.roomName, this.state.privNick)
             .then(() => console.log('Connection started!' + this.state.roomName))
-            .catch(err => console.error(err));
-
+            .catch(err => console.error(err));      
 
     };
 
+    sendMessageTOUser = () => {
+        this.state.hubConnection
+            .invoke('SendMessageToUser', this.state.name, this.name.privateChat, this.state.message)
+            .catch(err => console.error(err));
 
-
-
+        this.setState({ message: '' });
+    };
 
     render() { 
         return (

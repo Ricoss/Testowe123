@@ -33,10 +33,8 @@ namespace Chat.Hubs
         public async Task Private(string roomName, string name)
         {
             var nameID = ChatClients.Where(s => s.Key == name).Select(s => s.Value.ID).First();
-            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
             await Groups.AddToGroupAsync( nameID, roomName);
-
-
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
         }
         public async Task JoinRoom(string roomName)
         {
