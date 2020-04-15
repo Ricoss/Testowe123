@@ -1,4 +1,5 @@
 ﻿using _123.Hub;
+
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Concurrent;
@@ -12,8 +13,9 @@ namespace Chat.Hubs
 
     public class ChatHub : Hub 
     {
+       
         private static ConcurrentDictionary<string, User> ChatClients = new ConcurrentDictionary<string, User>();
-        private static ConcurrentDictionary<string, User> ChatRoom = new ConcurrentDictionary<string, User>();
+        private static ConcurrentDictionary<string, ChatRoom> ChatRoom = new ConcurrentDictionary<string, ChatRoom>();
 
         //public async Task SendMessageToAll(string name, string message)
         //{
@@ -30,9 +32,11 @@ namespace Chat.Hubs
             return Clients.Client(nameID).SendAsync("ReceiveMessage", name, message);
         }
 
-        public async Task Private(string roomName, string name)
+        public async Task Private(string roomName, string name1, string name2)
         {
-            var nameID = ChatClients.Where(s => s.Key == name).Select(s => s.Value.ID).First();
+            ChatRoom chatuser = new ChatRoom { Name1 = name1, Name2 = name2 };
+            ChatRoom.TryAdd(roomName, chatuser);
+            var nameID = ChatClients.Where(s => s.Key == name1).Select(s => s.Value.ID).First();
             await Groups.AddToGroupAsync( nameID, roomName);
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
         }
@@ -64,7 +68,3 @@ namespace Chat.Hubs
     }
 }
 
-public interface IClient
-{
-    void ParticipantLogin(User client);
-}

@@ -63,7 +63,7 @@ export class Endchat extends Component {
         this.state.roomName = this.state.nick + this.state.privNick
         console.log(this.state.roomName);
         this.state.hubConnection
-            .invoke('Private', this.state.roomName, this.state.privNick)
+            .invoke('Private', this.state.roomName, this.state.privNick, this.state.nick)
             .then(() => console.log('Connection started!' + this.state.roomName))
             .catch(err => console.error(err));      
     };
