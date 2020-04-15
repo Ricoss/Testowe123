@@ -9,7 +9,7 @@ export class Endchat extends Component {
 
         this.state = {
             nick: '',
-            roomName:'123',
+            roomName:'',
             message: '',
             messages: [],
             hubConnection: null,
@@ -60,6 +60,12 @@ export class Endchat extends Component {
     };
 
     sendMessage = () => {
+
+        //this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage, ) => {
+        //    const text = `${nick}: ${receivedMessage}`;
+        //    const messages = this.state.messages.concat([text]);
+        //    this.setState({ messages });
+        //});
         this.state.hubConnection
             .invoke('SendMessageGroup', this.state.nick, this.state.message, this.state.roomName)
             .catch(err => console.error(err));
@@ -68,6 +74,18 @@ export class Endchat extends Component {
   
     };
    
+    privateChat = () => {
+        this.state.roomName = this.state.nick + this.state.privNick
+        console.log(this.state.roomName);
+        this.state.hubConnection
+            .invoke('Private', this.state.roomName, this.state.privNick)
+            .then(() => console.log('Connection started!' + this.state.roomName))
+            .catch(err => console.error(err));
+
+
+    };
+
+
 
 
 
@@ -87,20 +105,19 @@ export class Endchat extends Component {
                                 onChange={e => this.setState({ privNick: e.target.value })}
                             />
                             <br />
-                            Mesage:
-                            <br />
-                            <input
-                                type="text"
-                                value={this.state.message}
-                                onChange={e => this.setState({ message: e.target.value })}
-                            /> 
-                            <br />
-                               <button onClick={this.sendMessage}>Send</button>
+                            <button onClick={this.privateChat}>Open chat</button>
                         </div>
                         
                     </Col>
                     <Col>
                         <div>
+                            <input
+                                type="text"
+                                value={this.state.message}
+                                onChange={e => this.setState({ message: e.target.value })}
+                            />
+                            <br />
+                            <button onClick={this.sendMessage}>Send</button>
                             {this.state.messages.map((message, index) => (
                                 <span style={{ display: 'block' }} key={index}> {message} </span>
                             ))}

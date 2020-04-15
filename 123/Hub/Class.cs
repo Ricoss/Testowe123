@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Chat.Hubs
@@ -13,7 +14,7 @@ namespace Chat.Hubs
     {
         private static ConcurrentDictionary<string, User> ChatClients = new ConcurrentDictionary<string, User>();
         private static ConcurrentDictionary<string, User> ChatRoom = new ConcurrentDictionary<string, User>();
- 
+
         //public async Task SendMessageToAll(string name, string message)
         //{
         //    await Clients.All.SendAsync("SendMessageToAll", name, message);
@@ -23,13 +24,23 @@ namespace Chat.Hubs
         //    return Clients.Caller.SendAsync("ReceiveMessage", message);
         //}
 
-        //public Task SendMessageToUser(string name, string connect, string message)
-        //{
-        //    return Clients.Client(connect).SendAsync("ReceiveMessage", name, message);
-        //}
-       public async Task JoinRoom (string roomName)
+        public Task SendMessageToUser(string name, string nameI, string message)
         {
-            await Groups.AddToGroupAsync( Context.ConnectionId, roomName);
+            var nameID = ChatClients.Where(s => s.Key == nameI).Select(s => s.Value.ID).First();
+            return Clients.Client(nameID).SendAsync("ReceiveMessage", name, message);
+        }
+
+        public async Task Private(string roomName, string name)
+        {
+            var nameID = ChatClients.Where(s => s.Key == name).Select(s => s.Value.ID).First();
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+            await Groups.AddToGroupAsync( nameID, roomName);
+
+
+        }
+        public async Task JoinRoom(string roomName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
         }
         public async Task SendMessageGroup (string name , string message, string roomName)
         {
