@@ -14,7 +14,8 @@ export class Endchat extends Component {
             messages: [],
             hubConnection: null,
             privNick: '',
-            group:'',
+            group: '',
+            user: '',
         };
         
     }
@@ -59,6 +60,19 @@ export class Endchat extends Component {
 
     }
 
+    Join = () => {
+
+
+    }
+
+    addUser = () => {
+          this.state.hubConnection
+                 .invok('AddUserRoom', this.state.group, this.state.user)
+                 .then(() => console.log(this.state.user +"join to "+this.state.group))
+            .catch(err => console.error(err));
+      
+    }
+
     //sendMessage = () => {
     //    this.state.hubConnection
     //        .invoke('SendMessagePrivate', this.state.nick, this.state.message, this.state.roomName, this.state.privNick)
@@ -77,12 +91,12 @@ export class Endchat extends Component {
     //};
 
     private = () => {
-       
-        this.state.roomName = this.state.nick + this.state.privNick
-        console.log(this.state.roomName);
         this.state.hubConnection
             .invoke('SendMessageToUser', this.state.nick, this.state.privNick, this.state.message)
+            .then(() => console.log("Send"))
+            .catch(err => console.error(err));
     }
+
     render() { 
         return (
             <Container>
@@ -109,7 +123,14 @@ export class Endchat extends Component {
                          />
                             <br />
                             <button onClick={this.createGroup}>CreateGroup</button>
-                            <button onClick={this.private}>Add</button>
+                            <br />
+                            <input
+                                type="text"
+                                value={this.state.user}
+                                onChange={e => this.setState({ user: e.target.value })}
+                            />
+                            <br />
+                            <button onClick={this.addUser}>Add</button>
                             <button onClick={this.private}>Remove</button>
                            
                         </div>

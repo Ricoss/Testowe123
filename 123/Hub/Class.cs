@@ -35,9 +35,16 @@ namespace Chat.Hubs
         {
             ChatRoom.Add(roomName);
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+        }//\/
+        public async Task AddUserRoom(string roomName , string addName)
+        {
+            var nameID = ChatClients.Where(s => s.Key == addName).Select(s => s.Value.ID).First();
+            await Groups.AddToGroupAsync(nameID, roomName);
         }
 
 
+
+        
 
         //public async Task Private(string roomName, string name1, string name2)
         //{
@@ -56,10 +63,6 @@ namespace Chat.Hubs
         //    await Clients.Group(roomName).SendAsync("SendMessageGroup", name, message);
         //}
 
-        public async Task JoinRoom(string roomName)
-        {
-            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
-        }
         public async Task SendMessageGroup (string name , string message, string roomName)
         {
             await Clients.Group(roomName).SendAsync("SendMessageGroup", name, message);
