@@ -12,10 +12,12 @@ export class Endchat extends Component {
             roomName:'',
             message: '',
             messages: [],
+            messageGroup: '',
+            messagesGroup: [],
             hubConnection: null,
             privNick: '',
-            group: '',
             user: '',
+            
         };
         
     }
@@ -41,7 +43,11 @@ export class Endchat extends Component {
             const messages = this.state.messages.concat([text]);
             this.setState({ messages });
         });
-
+            this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage, ) => {
+                const text = `${nick}: ${receivedMessage}`;
+                const messages = this.state.messages.concat([text]);
+                this.setState({ messages });
+            });
         });  
     }
 
@@ -51,27 +57,41 @@ export class Endchat extends Component {
             .then(() => console.log('Apllay'))
             .catch(err => console.error(err));
     }
+    private = () => {
+        this.state.hubConnection
+            .invoke('SendMessageToUser', this.state.nick, this.state.privNick, this.state.message)
+            .then(() => console.log("Send"))
+            .catch(err => console.error(err));
+    }
 
     createGroup = () => {
         this.state.hubConnection
-            .invoke('CreateRoom', this.state.group)
-            .then(() => console.log(this.state.group))
+            .invoke('CreateRoom', this.state.roomName)
+            .then(() => console.log(this.state.roomName))
             .catch(err => console.error(err));
-
-    }
-
-    Join = () => {
-
 
     }
 
     addUser = () => {
-          this.state.hubConnection
-                 .invok('AddUserRoom', this.state.group, this.state.user)
-                 .then(() => console.log(this.state.user +"join to "+this.state.group))
+        this.state.hubConnection
+            .invoke('AddUserRoom', this.state.roomName, this.state.user)
+            .then(() => console.log(this.state.user))
             .catch(err => console.error(err));
+    };
+
+    sendGroup = () => {
+
+        this.state.hubConnection
+            .invoke('SendMessageGroup', this.state.nick, this.state.message, this.state.roomName)
+    };
+
+    //addUser = () => {
+    //      this.state.hubConnection
+    //          .invok('AddUserRoom', this.state.roomName, this.state.user)
+    //             .then(() => console.log(this.state.user +"join to "+this.state.group))
+    //        .catch(err => console.error(err));
       
-    }
+    //}
 
     //sendMessage = () => {
     //    this.state.hubConnection
@@ -90,12 +110,6 @@ export class Endchat extends Component {
     //        .catch(err => console.error(err));      
     //};
 
-    private = () => {
-        this.state.hubConnection
-            .invoke('SendMessageToUser', this.state.nick, this.state.privNick, this.state.message)
-            .then(() => console.log("Send"))
-            .catch(err => console.error(err));
-    }
 
     render() { 
         return (
@@ -113,16 +127,21 @@ export class Endchat extends Component {
                                 onChange={e => this.setState({ privNick: e.target.value })}
                             />
                         </div>
-                        <div>
+
+                         <div>
                         Group:
+                        <br />  
+                        Room Name:
                         <br />    
                         <input
                                 type="text"
-                                value={this.state.group}
-                                onChange={e => this.setState({ group: e.target.value })}
+                                value={this.state.roomName}
+                                onChange={e => this.setState({ roomName: e.target.value })}
                          />
                             <br />
                             <button onClick={this.createGroup}>CreateGroup</button>
+                            <br />
+                            User:
                             <br />
                             <input
                                 type="text"
@@ -132,11 +151,11 @@ export class Endchat extends Component {
                             <br />
                             <button onClick={this.addUser}>Add</button>
                             <button onClick={this.private}>Remove</button>
-                           
+
                         </div>
-                        
                     </Col>
                     <Col>
+                        <h1> Priv </h1>
                         <div>
                             <input
                                 type="text"
@@ -147,6 +166,21 @@ export class Endchat extends Component {
                             <button onClick={this.private}>Send</button>
                             {this.state.messages.map((message, index) => (
                                 <span style={{ display: 'block' }} key={index}> {message} </span>
+                            ))}
+                        </div>
+                    </Col>
+                    <Col>
+                        <h1> Group </h1>
+                        <div>
+                            <input
+                                type="text"
+                                value={this.state.messageGroup}
+                                onChange={e => this.setState({ messageGroup: e.target.value })}
+                            />
+                            <br />
+                            <button onClick={this.sendGroup}>Send</button>
+                            {this.state.messagesGroup.map((messageGroup, index) => (
+                                <span style={{ display: 'block' }} key={index}> {messageGroup} </span>
                             ))}
                         </div>
                     </Col>
