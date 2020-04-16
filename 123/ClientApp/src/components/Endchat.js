@@ -14,6 +14,7 @@ export class Endchat extends Component {
             messages: [],
             hubConnection: null,
             privNick: '',
+            group:'',
         };
         
     }
@@ -34,7 +35,7 @@ export class Endchat extends Component {
                 .then(() => console.log('Connection started!'))
                 .catch(err => console.log('Error while establishing connection :('))
                 
-        this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage, ) => {
+            this.state.hubConnection.on('SendMessageToUser', (nick, receivedMessage, ) => {
             const text = `${nick}: ${receivedMessage}`;
             const messages = this.state.messages.concat([text]);
             this.setState({ messages });
@@ -51,24 +52,30 @@ export class Endchat extends Component {
     }
 
 
-    sendMessage = () => {
-        this.state.hubConnection
-            .invoke('SendMessagePrivate', this.state.nick, this.state.message, this.state.roomName, this.state.privNick)
-            .catch(err => console.error(err));
+    //sendMessage = () => {
+    //    this.state.hubConnection
+    //        .invoke('SendMessagePrivate', this.state.nick, this.state.message, this.state.roomName, this.state.privNick)
+    //        .catch(err => console.error(err));
 
-        this.setState({ message: '' });
-    };
+    //    this.setState({ message: '' });
+    //};
    
-    privateChat = () => {
+    //privateChat = () => {
+    //    this.state.roomName = this.state.nick + this.state.privNick
+    //    console.log(this.state.roomName);
+    //    this.state.hubConnection
+    //        .invoke('Private', this.state.roomName, this.state.privNick, this.state.nick)
+    //        .then(() => console.log('Connection started!' + this.state.roomName))
+    //        .catch(err => console.error(err));      
+    //};
+
+    private = () => {
+       
         this.state.roomName = this.state.nick + this.state.privNick
         console.log(this.state.roomName);
         this.state.hubConnection
-            .invoke('Private', this.state.roomName, this.state.privNick, this.state.nick)
-            .then(() => console.log('Connection started!' + this.state.roomName))
-            .catch(err => console.error(err));      
-    };
-
-
+            .invoke('SendMessageToUser', this.state.nick, this.state.privNick, this.state.message)
+    }
     render() { 
         return (
             <Container>
@@ -84,9 +91,28 @@ export class Endchat extends Component {
                                 value={this.state.privNick}
                                 onChange={e => this.setState({ privNick: e.target.value })}
                             />
+                        </div>
+                        <div>
+                        Group:
+                        <br />    
+                        <input
+                                type="text"
+                                value={this.state.group}
+                                onChange={e => this.setState({ group: e.target.value })}
+                         />
                             <br />
-                           
-                            <button onClick={this.privateChat}>Open chat</button>
+                            <button onClick={this.private}>CreateGroup</button>
+                            {this.state.messages.map((message, index) => (
+                                <span style={{ display: 'block' }} key={index}> {message} </span>
+                            ))}
+                            <button onClick={this.private}>Add</button>
+                            {this.state.messages.map((message, index) => (
+                                <span style={{ display: 'block' }} key={index}> {message} </span>
+                            ))}
+                            <button onClick={this.private}>Remove</button>
+                            {this.state.messages.map((message, index) => (
+                                <span style={{ display: 'block' }} key={index}> {message} </span>
+                            ))}
                         </div>
                         
                     </Col>
@@ -98,7 +124,7 @@ export class Endchat extends Component {
                                 onChange={e => this.setState({ message: e.target.value })}
                             />
                             <br />
-                            <button onClick={this.sendMessage}>Send</button>
+                            <button onClick={this.private}>Send</button>
                             {this.state.messages.map((message, index) => (
                                 <span style={{ display: 'block' }} key={index}> {message} </span>
                             ))}
