@@ -15,7 +15,7 @@ namespace Chat.Hubs
     {
        
         private static ConcurrentDictionary<string, User> ChatClients = new ConcurrentDictionary<string, User>();
-        private static ConcurrentDictionary<string, ChatRoom> ChatRoom = new ConcurrentDictionary<string, ChatRoom>();
+        private static IList<string> ChatRoom = new List<string>();
 
         public  ConcurrentDictionary <string, User>  Login (string name)
         {
@@ -31,18 +31,22 @@ namespace Chat.Hubs
             return Clients.Client(nameID).SendAsync("SendMessageToUser", fromName, message);
         }//\/
 
-
-
-
-
-        public async Task Private(string roomName, string name1, string name2)
+        public async Task CreateRoom (string roomName)
         {
-            ChatRoom chatuser = new ChatRoom { Name1 = name1, Name2 = name2 };
-            ChatRoom.TryAdd(roomName, chatuser);
-            var nameID = ChatClients.Where(s => s.Key == name1).Select(s => s.Value.ID).First();
-            await Groups.AddToGroupAsync( nameID, roomName);
+            ChatRoom.Add(roomName);
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
         }
+
+
+
+        //public async Task Private(string roomName, string name1, string name2)
+        //{
+        //    ChatRoom chatuser = new ChatRoom { Name1 = name1, Name2 = name2 };
+        //    ChatRoom.TryAdd(roomName, chatuser);
+        //    var nameID = ChatClients.Where(s => s.Key == name1).Select(s => s.Value.ID).First();
+        //    await Groups.AddToGroupAsync( nameID, roomName);
+        //    await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+        //}
         //public async Task SendMessagePrivate(string name, string message, string roomName , string nameod)
         //{
         //    if (roomName == "")

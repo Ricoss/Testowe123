@@ -51,6 +51,13 @@ export class Endchat extends Component {
             .catch(err => console.error(err));
     }
 
+    createGroup = () => {
+        this.state.hubConnection
+            .invoke('CreateRoom', this.state.group)
+            .then(() => console.log(this.state.group))
+            .catch(err => console.error(err));
+
+    }
 
     //sendMessage = () => {
     //    this.state.hubConnection
@@ -101,18 +108,10 @@ export class Endchat extends Component {
                                 onChange={e => this.setState({ group: e.target.value })}
                          />
                             <br />
-                            <button onClick={this.private}>CreateGroup</button>
-                            {this.state.messages.map((message, index) => (
-                                <span style={{ display: 'block' }} key={index}> {message} </span>
-                            ))}
+                            <button onClick={this.createGroup}>CreateGroup</button>
                             <button onClick={this.private}>Add</button>
-                            {this.state.messages.map((message, index) => (
-                                <span style={{ display: 'block' }} key={index}> {message} </span>
-                            ))}
                             <button onClick={this.private}>Remove</button>
-                            {this.state.messages.map((message, index) => (
-                                <span style={{ display: 'block' }} key={index}> {message} </span>
-                            ))}
+                           
                         </div>
                         
                     </Col>
