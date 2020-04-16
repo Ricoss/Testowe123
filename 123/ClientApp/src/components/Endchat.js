@@ -53,7 +53,7 @@ export class Endchat extends Component {
 
     sendMessage = () => {
         this.state.hubConnection
-            .invoke('SendMessageGroup', this.state.nick, this.state.message, this.state.roomName)
+            .invoke('SendMessagePrivate', this.state.nick, this.state.message, this.state.roomName, this.state.privNick)
             .catch(err => console.error(err));
 
         this.setState({ message: '' });
@@ -85,14 +85,7 @@ export class Endchat extends Component {
                                 onChange={e => this.setState({ privNick: e.target.value })}
                             />
                             <br />
-                            ss
-                            <br />
-                            <input
-                                type="text"
-                                value={this.state.roomName}
-                                onChange={e => this.setState({ roomName: e.target.value })}
-                            />
-                            <br />
+                           
                             <button onClick={this.privateChat}>Open chat</button>
                         </div>
                         

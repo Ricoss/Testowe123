@@ -40,6 +40,15 @@ namespace Chat.Hubs
             await Groups.AddToGroupAsync( nameID, roomName);
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
         }
+        public async Task SendMessagePrivate(string name, string message, string roomName , string nameod)
+        {
+            if (roomName == "")
+            {
+            roomName = ChatRoom.Where(s => s.Value.Name1 == name && s.Value.Name2 == nameod).Select(s => s.Key).First();
+            }
+            await Clients.Group(roomName).SendAsync("SendMessageGroup", name, message);
+        }
+
         public async Task JoinRoom(string roomName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
