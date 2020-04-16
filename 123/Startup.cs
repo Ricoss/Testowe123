@@ -60,7 +60,6 @@ namespace _123
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapHub<ChatHub>("/chatt");
-                endpoints.MapHub<ChatHub>("/Nover");
             });
 
 
