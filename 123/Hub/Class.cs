@@ -44,7 +44,15 @@ namespace Chat.Hubs
         public async Task SendMessageGroup (string name , string message, string roomName)
         {
             await Clients.Group(roomName).SendAsync("SendMessageGroup", name, message);
+        }//\\/
+
+        public async Task RemoveUserRoom(string roomName , string removeName)
+        {
+            var nameID = ChatClients.Where(s => s.Key == removeName).Select(s => s.Value.ID).First();
+            await Groups.RemoveFromGroupAsync(nameID, roomName);
         }
+
+
 
         public async Task JoinRoom(string roomName)
         {
@@ -69,11 +77,6 @@ namespace Chat.Hubs
         //    }
         //    await Clients.Group(roomName).SendAsync("SendMessageGroup", name, message);
         //}
-
-        public async Task RemuweUSerRoom(string roomName)
-        {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
-        }
         public  async Task OnConnectedAsync( string name )
         {
             await Clients.All.SendAsync("OnConnectedAsync", Context.ConnectionId);

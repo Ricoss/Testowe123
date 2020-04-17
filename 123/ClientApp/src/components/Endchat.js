@@ -85,6 +85,13 @@ export class Endchat extends Component {
             .invoke('SendMessageGroup', this.state.nick, this.state.message, this.state.roomName)
     };
 
+    RemoveUser = () => {
+
+        this.state.hubConnection
+            .invoke('RemoveUserRoom', this.state.roomName, this.state.user)
+            .then(() => console.log(this.state.user))
+            .catch(err => console.error(err));
+    }
     //addUser = () => {
     //      this.state.hubConnection
     //          .invok('AddUserRoom', this.state.roomName, this.state.user)
@@ -150,7 +157,7 @@ export class Endchat extends Component {
                             />
                             <br />
                             <button onClick={this.addUser}>Add</button>
-                            <button onClick={this.private}>Remove</button>
+                            <button onClick={this.RemoveUser}>Remove</button>
 
                         </div>
                     </Col>
