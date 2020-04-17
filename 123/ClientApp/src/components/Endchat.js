@@ -38,12 +38,12 @@ export class Endchat extends Component {
                 .then(() => console.log('Connection started!'))
                 .catch(err => console.log('Error while establishing connection :('))
                 
-            //this.state.hubConnection.on('SendMessageToUser', (nick, receivedMessage, ) => {
-            //const text = `${nick}: ${receivedMessage}`;
-            //const messages = this.state.messages.concat([text]);
-            //this.setState({ messages });
-        //});
             this.state.hubConnection.on('SendMessageToUser', (nick, receivedMessage, ) => {
+            const text = `${nick}: ${receivedMessage}`;
+            const messages = this.state.messages.concat([text]);
+            this.setState({ messages });
+        });
+            this.state.hubConnection.on('SendMessageGroup', (nick, receivedMessage, ) => {
                 const text = `${nick}: ${receivedMessage}`;
                 const messagesGroup = this.state.messagesGroup.concat([text]);
                 this.setState({ messagesGroup });
@@ -178,7 +178,7 @@ export class Endchat extends Component {
                                 onChange={e => this.setState({ messageGroup: e.target.value })}
                             />
                             <br />
-                            <button onClick={this.private}>Send</button>
+                            <button onClick={this.sendGroup}>Send</button>
                             {this.state.messagesGroup.map((messageGroup, index) => (
                                 <span style={{ display: 'block' }} key={index}> {messageGroup} </span>
                             ))}
