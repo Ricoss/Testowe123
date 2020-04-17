@@ -17,7 +17,7 @@ export class Endchat extends Component {
             hubConnection: null,
             privNick: '',
             user: '',
-            
+            GroupList: [],
         };
         
     }

@@ -50,14 +50,8 @@ namespace Chat.Hubs
         {
             var nameID = ChatClients.Where(s => s.Key == removeName).Select(s => s.Value.ID).First();
             await Groups.RemoveFromGroupAsync(nameID, roomName);
-        }
+        }//\/
 
-
-
-        public async Task JoinRoom(string roomName)
-        {
-            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);        
-        }
 
 
 
