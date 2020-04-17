@@ -82,7 +82,7 @@ export class Endchat extends Component {
     sendGroup = () => {
 
         this.state.hubConnection
-            .invoke('SendMessageGroup', this.state.nick, this.state.message, this.state.roomName)
+            .invoke('SendMessageGroup', this.state.nick, this.state.messageGroup, this.state.roomName)
     };
 
     RemoveUser = () => {
